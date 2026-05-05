@@ -17,6 +17,12 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (response) => response.data,
   (error) => {
+    console.error("API Error:", {
+      status: error.response?.status,
+      data: error.response?.data,
+      url: error.config?.url
+    })
+    
     if (error.response?.status === 401) {
       localStorage.removeItem('kcv_token')
       window.location.href = '/login'

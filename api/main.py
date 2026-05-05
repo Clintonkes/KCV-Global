@@ -5,10 +5,35 @@ import json
 from database.session import engine, Base
 from .routers import auth, photos, products, orders, sessions, submissions, admin
 
-# Create tables
+import logging
+from fastapi import Request
+from fastapi.responses import JSONResponse
+import traceback
+
+# Configure Logging
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    handlers=[logging.StreamHandler()]
+)
+logger = logging.getLogger("kcv-global")
+
 Base.metadata.create_all(bind=engine)
 
-app = FastAPI(title="KCV Global API", version="1.0.0")
+app = FastAPI(title="KCV Global", version="1.0.0")
+
+# Error Logging Middleware
+@app.middleware("http")
+async def error_logging_middleware(request: Request, call_next):
+    try:
+        return await call_next(request)
+    except Exception as e:
+        logger.error(f"Unhandled Exception: {str(e)}")
+        logger.error(traceback.format_exc())
+        return JSONResponse(
+            status_code=500,
+            content={"detail": "Internal Server Error", "error": str(e)}
+        )
 
 # CORS Configuration
 origins = json.loads(os.getenv("ALLOWED_ORIGINS", '["http://localhost:5173"]'))
