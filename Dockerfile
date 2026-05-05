@@ -4,7 +4,9 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install --legacy-peer-deps
 COPY . .
-RUN npm run build
+# Verify file structure for debugging
+RUN ls -R /app && [ -f index.html ] || (echo "Error: index.html missing from root" && exit 1)
+RUN npm run build -- --logLevel info
 
 # --- Stage 2: Set up the Python Backend ---
 FROM python:3.11-slim

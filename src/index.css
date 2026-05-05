@@ -1,0 +1,76 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: 'Editorial New';
+  src: url('https://fonts.cdnfonts.com/s/91211/EditorialNew-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Satoshi';
+  src: url('https://fonts.cdnfonts.com/s/76634/Satoshi-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+:root {
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #121417;
+  color: #E5E7EB;
+  font-family: 'Satoshi', sans-serif;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Editorial New', serif;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #121417;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1A1D21;
+  border-radius: 10px;
+  border: 2px solid #121417;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #F3E5D8;
+}
+
+/* Glassmorphism Utilities */
+.glass {
+  background: rgba(26, 29, 33, 0.4);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.noise-overlay {
+  position: relative;
+}
+
+.noise-overlay::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.03;
+  background-image: url('https://grainy-gradients.vercel.app/noise.svg');
+  z-index: 1;
+}
