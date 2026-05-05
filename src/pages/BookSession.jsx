@@ -3,7 +3,8 @@ import { motion } from 'framer-motion'
 import { sessionsAPI } from '../services/api'
 import { Calendar as CalendarIcon, Clock, MessageSquare, CheckCircle } from 'lucide-react'
 import toast from 'react-hot-toast'
-  // ... (formData state)
+
+export default function BookSession() {
   const [formData, setFormData] = useState({
     date: '',
     time_slot: '',
