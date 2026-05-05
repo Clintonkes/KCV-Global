@@ -13,3 +13,4 @@ stripe
 pillow
 pytest
 httpx
+email-validator
