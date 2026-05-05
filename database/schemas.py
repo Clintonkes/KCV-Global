@@ -18,7 +18,7 @@ class User(UserBase):
     created_at: datetime
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class Token(BaseModel):
     access_token: str
@@ -41,7 +41,7 @@ class Photo(PhotoBase):
     created_at: datetime
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 # Product Schemas
 class ProductBase(BaseModel):
@@ -60,7 +60,7 @@ class Product(ProductBase):
     created_at: datetime
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 # Order Schemas
 class OrderBase(BaseModel):
@@ -77,7 +77,7 @@ class Order(OrderBase):
     created_at: datetime
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 # Session Schemas
 class SessionBase(BaseModel):
@@ -96,7 +96,7 @@ class Session(SessionBase):
     created_at: datetime
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 # Submission Schemas
 class SubmissionBase(BaseModel):

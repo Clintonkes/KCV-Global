@@ -14,8 +14,8 @@ export default {
         'platinum': '#E5E7EB',
       },
       fontFamily: {
-        serif: ['Editorial New', 'Cormorant Garamond', 'serif'],
-        sans: ['Satoshi', 'General Sans', 'sans-serif'],
+        serif: ['Cormorant Garamond', 'serif'],
+        sans: ['Inter', 'sans-serif'],
       },
       borderRadius: {
         'xl': '12px',
