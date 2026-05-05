@@ -63,6 +63,9 @@ app.include_router(admin.router, prefix="/api/v1/admin", tags=["Admin"])
 # Serve Static Files
 if os.path.exists("dist"):
     app.mount("/assets", StaticFiles(directory="dist/assets"), name="assets")
+
+if os.path.exists("uploads"):
+    app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
     
     @app.get("/{full_path:path}")
     async def serve_frontend(full_path: str):

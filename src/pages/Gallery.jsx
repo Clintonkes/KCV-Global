@@ -3,6 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { photosAPI } from '../services/api'
 import { Eye, Heart } from 'lucide-react'
 
+import toast from 'react-hot-toast'
+
 export default function Gallery() {
   const [photos, setPhotos] = useState([])
   const [filter, setFilter] = useState('All')
@@ -10,10 +12,21 @@ export default function Gallery() {
 
   const categories = ['All', 'Portrait', 'Landscape', 'Fine Art', 'Commercial', 'Editorial']
 
+  const getFullUrl = (url) => {
+    if (!url) return ''
+    if (url.startsWith('http')) return url
+    const baseUrl = import.meta.env.PROD ? '' : 'http://localhost:8000'
+    return `${baseUrl}/${url.startsWith('/') ? url.slice(1) : url}`
+  }
+
   useEffect(() => {
     setLoading(true)
     photosAPI.list({ category: filter === 'All' ? undefined : filter })
       .then(setPhotos)
+      .catch(err => {
+        toast.error("Failed to load gallery")
+        console.error(err)
+      })
       .finally(() => setLoading(false))
   }, [filter])
 
@@ -73,7 +86,7 @@ export default function Gallery() {
                   className="group relative aspect-[3/4] overflow-hidden rounded-2xl bg-slate-card cursor-pointer border border-white/5"
                 >
                   <img 
-                    src={photo.url} 
+                    src={getFullUrl(photo.url)} 
                     alt={photo.title} 
                     className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   />

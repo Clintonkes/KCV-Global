@@ -44,7 +44,8 @@ class Product(Base):
 class Order(Base):
     __tablename__ = "orders"
     id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey("users.id"))
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=True)
+    email = Column(String, nullable=True)
     status = Column(String, default="pending") # pending, paid, shipped
     total_amount = Column(Float)
     stripe_intent_id = Column(String, nullable=True)
@@ -56,7 +57,9 @@ class Order(Base):
 class Session(Base):
     __tablename__ = "sessions"
     id = Column(Integer, primary_key=True, index=True)
-    client_id = Column(Integer, ForeignKey("users.id"))
+    client_id = Column(Integer, ForeignKey("users.id"), nullable=True)
+    email = Column(String, nullable=True)
+    guest_name = Column(String, nullable=True)
     date = Column(String) # e.g. "2026-05-15"
     time_slot = Column(String) # e.g. "10:00 AM"
     type = Column(String) # Portrait, Commercial, Wedding

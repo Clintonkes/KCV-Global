@@ -1,11 +1,12 @@
 import { motion } from 'framer-motion'
+import { Link } from 'react-router-dom'
 import { Camera, ArrowRight, Star } from 'lucide-react'
 
 export default function Home() {
   return (
     <div className="bg-slate-deep text-platinum min-h-screen">
       {/* Hero Section */}
-      <section className="relative h-screen flex items-center px-10">
+      <section className="relative h-screen flex items-center px-10 pt-32 lg:pt-0">
         <div className="max-w-4xl z-10">
           <motion.span 
             initial={{ opacity: 0, x: -20 }}
@@ -35,14 +36,14 @@ export default function Home() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6 }}
-            className="mt-12 flex gap-6"
+            className="mt-12 flex flex-col sm:flex-row gap-6"
           >
-            <button className="bg-champagne text-slate-deep px-8 py-4 rounded-xl font-sans font-bold hover:scale-105 transition-transform flex items-center gap-2">
+            <Link to="/book" className="bg-champagne text-slate-deep px-8 py-4 rounded-xl font-sans font-bold hover:scale-105 transition-transform flex items-center justify-center gap-2">
               Book a Session <Camera size={18} />
-            </button>
-            <button className="border border-platinum/20 text-platinum px-8 py-4 rounded-xl font-sans hover:bg-white/5 transition-colors flex items-center gap-2">
+            </Link>
+            <Link to="/gallery" className="border border-platinum/20 text-platinum px-8 py-4 rounded-xl font-sans hover:bg-white/5 transition-colors flex items-center justify-center gap-2">
               View Gallery <ArrowRight size={18} />
-            </button>
+            </Link>
           </motion.div>
         </div>
 

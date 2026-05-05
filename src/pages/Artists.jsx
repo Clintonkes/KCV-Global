@@ -3,6 +3,8 @@ import { motion } from 'framer-motion'
 import { submissionsAPI } from '../services/api'
 import { User, Mail, Globe, Briefcase } from 'lucide-react'
 
+import toast from 'react-hot-toast'
+
 export default function Artists() {
   const [artists, setArtists] = useState([])
   const [loading, setLoading] = useState(true)
@@ -11,7 +13,6 @@ export default function Artists() {
 
   useEffect(() => {
     // In a real app, this would fetch approved artists. 
-    // For now, we'll show a placeholder list and the application flow.
     setLoading(false)
   }, [])
 
@@ -19,10 +20,11 @@ export default function Artists() {
     e.preventDefault()
     try {
       await submissionsAPI.submit(applyForm)
-      alert('Application submitted successfully!')
+      toast.success('Application submitted! We will review it shortly.')
       setShowApply(false)
     } catch (err) {
-      alert('Error submitting application. Make sure you are logged in.')
+      toast.error('Submission failed. Please check your connection.')
+      console.error(err)
     }
   }
 

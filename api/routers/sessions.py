@@ -3,23 +3,23 @@ from sqlalchemy.orm import Session
 from typing import List, Optional
 from database.session import get_db
 from database import models, schemas
-from .auth import get_current_user
+from .auth import get_current_user, get_current_user_optional
 
 router = APIRouter()
 
 @router.get("/", response_model=List[schemas.Session])
 def list_available_slots(date: Optional[str] = None, db: Session = Depends(get_db)):
-    # In a real app, logic would filter based on existing bookings
-    # For now, just returning all bookings as a simplified list
     query = db.query(models.Session)
     if date:
         query = query.filter(models.Session.date == date)
     return query.all()
 
 @router.post("/book", response_model=schemas.Session)
-def book_session(session_data: schemas.SessionCreate, db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
+def book_session(session_data: schemas.SessionCreate, db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user_optional)):
     new_session = models.Session(
-        client_id=current_user.id,
+        client_id=current_user.id if current_user else None,
+        email=session_data.email if not current_user else current_user.email,
+        guest_name=session_data.guest_name,
         date=session_data.date,
         time_slot=session_data.time_slot,
         type=session_data.type,

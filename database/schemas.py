@@ -66,13 +66,14 @@ class Product(ProductBase):
 class OrderBase(BaseModel):
     items: Any # JSON field
     total_amount: float
+    email: Optional[EmailStr] = None
 
 class OrderCreate(OrderBase):
     pass
 
 class Order(OrderBase):
     id: int
-    user_id: int
+    user_id: Optional[int] = None
     status: str
     created_at: datetime
 
@@ -85,13 +86,15 @@ class SessionBase(BaseModel):
     time_slot: str
     type: str
     notes: Optional[str] = None
+    email: Optional[EmailStr] = None
+    guest_name: Optional[str] = None
 
 class SessionCreate(SessionBase):
     pass
 
 class Session(SessionBase):
     id: int
-    client_id: int
+    client_id: Optional[int] = None
     status: str
     created_at: datetime
 

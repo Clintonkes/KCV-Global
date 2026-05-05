@@ -42,13 +42,22 @@ function AdminRoute({ children }) {
   return children
 }
 
+import { Toaster } from 'react-hot-toast'
+
 /* ── Layout Wrapper ── */
 function SiteLayout({ children }) {
   return (
     <>
       <Navbar />
-      <main>{children}</main>
+      <main className="pt-24">{children}</main>
       <Footer />
+      <Toaster position="bottom-right" toastOptions={{
+        style: {
+          background: '#1A1D21',
+          color: '#F3E5D8',
+          border: '1px solid rgba(255,255,255,0.05)'
+        }
+      }} />
     </>
   )
 }

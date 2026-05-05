@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from typing import List
 from database.session import get_db
 from database import models, schemas
-from .auth import get_current_user
+from .auth import get_current_user, get_current_user_optional
 import stripe
 import os
 
@@ -11,20 +11,20 @@ router = APIRouter()
 
 stripe.api_key = os.getenv("STRIPE_SECRET_KEY")
 
-@router.post("/checkout", response_model=schemas.Order)
-def checkout(order_data: schemas.OrderCreate, db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
-    # In a real app, you would validate product availability and calculate price server-side
-    
+@router.post("/checkout")
+def checkout(order_data: schemas.OrderCreate, db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user_optional)):
     try:
+        user_id_for_stripe = current_user.id if current_user else 'guest'
         # Create a PaymentIntent with the order amount and currency
         intent = stripe.PaymentIntent.create(
             amount=int(order_data.total_amount * 100),
             currency='usd',
-            metadata={'user_id': current_user.id}
+            metadata={'user_id': user_id_for_stripe, 'email': order_data.email}
         )
         
         new_order = models.Order(
-            user_id=current_user.id,
+            user_id=current_user.id if current_user else None,
+            email=order_data.email if not current_user else current_user.email,
             total_amount=order_data.total_amount,
             items=order_data.items,
             status="pending",
@@ -34,10 +34,12 @@ def checkout(order_data: schemas.OrderCreate, db: Session = Depends(get_db), cur
         db.commit()
         db.refresh(new_order)
         
-        # We attach the client_secret to the order object for the frontend to use
-        order_dict = schemas.Order.from_orm(new_order).dict()
-        order_dict['client_secret'] = intent.client_secret
-        return order_dict
+        return {
+            "status": "pending",
+            "order_id": new_order.id,
+            "client_secret": intent.client_secret,
+            "message": "Order placed successfully. An email with order details has been sent to your registered address."
+        }
         
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))

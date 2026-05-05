@@ -2,8 +2,8 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { sessionsAPI } from '../services/api'
 import { Calendar as CalendarIcon, Clock, MessageSquare, CheckCircle } from 'lucide-react'
-
-export default function BookSession() {
+import toast from 'react-hot-toast'
+  // ... (formData state)
   const [formData, setFormData] = useState({
     date: '',
     time_slot: '',
@@ -20,8 +20,10 @@ export default function BookSession() {
     try {
       await sessionsAPI.book(formData)
       setSubmitted(true)
+      toast.success('Booking request sent!')
     } catch (err) {
-      alert('Error booking session. Please try again.')
+      toast.error('Error booking session. Please try again.')
+      console.error(err)
     }
   }
 
@@ -135,6 +137,29 @@ export default function BookSession() {
                        <option value="">Select a time</option>
                        {timeSlots.map(s => <option key={s} value={s}>{s}</option>)}
                     </select>
+                 </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                 <div>
+                    <label className="block text-platinum/40 text-[10px] uppercase tracking-widest mb-2 font-sans font-bold">Your Name</label>
+                    <input 
+                      type="text" 
+                      required
+                      placeholder="Jane Doe"
+                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-platinum focus:outline-none focus:border-champagne/40 text-sm"
+                      onChange={(e) => setFormData({...formData, guest_name: e.target.value})}
+                    />
+                 </div>
+                 <div>
+                    <label className="block text-platinum/40 text-[10px] uppercase tracking-widest mb-2 font-sans font-bold">Email Address</label>
+                    <input 
+                      type="email" 
+                      required
+                      placeholder="jane@example.com"
+                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-platinum focus:outline-none focus:border-champagne/40 text-sm"
+                      onChange={(e) => setFormData({...formData, email: e.target.value})}
+                    />
                  </div>
               </div>
 
