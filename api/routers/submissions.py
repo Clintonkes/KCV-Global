@@ -21,6 +21,13 @@ def submit_work(submission_data: schemas.SubmissionCreate, db: Session = Depends
     db.add(new_submission)
     db.commit()
     db.refresh(new_submission)
+    
+    email.send_application_received_email(
+        to_email=new_submission.email,
+        name=new_submission.name,
+        category=new_submission.category
+    )
+    
     return new_submission
 
 @router.get("/my", response_model=List[schemas.Submission])

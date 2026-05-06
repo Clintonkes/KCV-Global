@@ -73,6 +73,19 @@ def send_order_status_email(to_email: str, order_id: int, status: str):
     """
     return send_email(to_email, subject, html)
 
+def send_application_received_email(to_email: str, name: str, category: str):
+    subject = "Artist Application Received - KCV Global"
+    html = f"""
+    <h2>Hello {name},</h2>
+    <p>Thank you for submitting your artist application to KCV Global!</p>
+    <p>We have successfully received your portfolio for the <strong>{category}</strong> category.</p>
+    <p>Our team will review your work and get back to you shortly.</p>
+    <br/>
+    <p>Best regards,</p>
+    <p>KCV Global Team</p>
+    """
+    return send_email(to_email, subject, html)
+
 def send_application_accepted_email(to_email: str, name: str):
     subject = "Application Approved - KCV Global"
     html = f"""

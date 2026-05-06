@@ -37,26 +37,26 @@ export const authAPI = {
 }
 
 export const photosAPI = {
-  list: (params) => api.get('/photos', { params }),
-  create: (data) => api.post('/photos', data, { headers: { 'Content-Type': 'multipart/form-data' } }),
+  list: (params) => api.get('/photos/', { params }),
+  create: (data) => api.post('/photos/', data, { headers: { 'Content-Type': 'multipart/form-data' } }),
   delete: (id) => api.delete(`/photos/${id}`),
 }
 
 export const productsAPI = {
-  list: (params) => api.get('/products', { params }),
+  list: (params) => api.get('/products/', { params }),
   get: (id) => api.get(`/products/${id}`),
-  create: (data) => api.post('/products', data, { headers: { 'Content-Type': 'multipart/form-data' } }),
+  create: (data) => api.post('/products/', data, { headers: { 'Content-Type': 'multipart/form-data' } }),
   update: (id, data) => api.put(`/products/${id}`, data, { headers: { 'Content-Type': 'multipart/form-data' } }),
   delete: (id) => api.delete(`/products/${id}`),
 }
 
 export const ordersAPI = {
   checkout: (data) => api.post('/orders/checkout', data),
-  list: () => api.get('/orders'),
+  list: () => api.get('/orders/'),
 }
 
 export const sessionsAPI = {
-  getSlots: (params) => api.get('/sessions', { params }),
+  getSlots: (params) => api.get('/sessions/', { params }),
   book: (data) => api.post('/sessions/book', data),
   my: () => api.get('/sessions/my'),
   updateStatus: (id, status) => api.put(`/sessions/${id}`, null, { params: { status } }),
@@ -64,7 +64,7 @@ export const sessionsAPI = {
 
 export const submissionsAPI = {
   submit: (data) => api.post('/submissions/', data),
-  list: () => api.get('/submissions'),
+  list: () => api.get('/submissions/'),
   review: (id, status) => api.put(`/submissions/${id}`, null, { params: { status } }),
 }
 

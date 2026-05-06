@@ -136,9 +136,9 @@ export default function AdminPhotos() {
 
             <form onSubmit={handleUpload} className="space-y-5">
               <div className="aspect-video bg-white/5 border border-white/10 border-dashed rounded-2xl flex flex-col items-center justify-center cursor-pointer hover:bg-white/10 transition-all relative overflow-hidden">
-                <input type="file" className="absolute inset-0 opacity-0 cursor-pointer" onChange={(e) => setFile(e.target.files[0])} required accept="image/*" />
+                <input type="file" className="absolute inset-0 opacity-0 cursor-pointer z-10" onChange={(e) => setFile(e.target.files[0])} required accept="image/*" />
                 {file ? (
-                  <p className="text-champagne font-sans text-sm px-4 text-center">{file.name}</p>
+                  <img src={URL.createObjectURL(file)} alt="Preview" className="absolute inset-0 w-full h-full object-cover" />
                 ) : (
                   <>
                     <ImageIcon className="text-platinum/10 mb-3" size={28} />
