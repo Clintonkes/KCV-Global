@@ -79,7 +79,9 @@ export default function AdminPhotos() {
   const getFullUrl = (url) => {
     if (!url) return ''
     if (url.startsWith('http')) return url
-    const base = import.meta.env.PROD ? '' : 'http://localhost:8000'
+    const base = import.meta.env.VITE_API_URL 
+      ? import.meta.env.VITE_API_URL.replace('/api/v1', '') 
+      : (import.meta.env.PROD ? '' : 'http://localhost:8000')
     return `${base}/${url.startsWith('/') ? url.slice(1) : url}`
   }
 

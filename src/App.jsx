@@ -22,7 +22,7 @@ import AdminLayout from './pages/admin/AdminLayout'
 import AdminDashboard from './pages/admin/AdminDashboard'
 import AdminPhotos from './pages/admin/AdminPhotos'
 import AdminSessions from './pages/admin/AdminSessions'
-import AdminProducts from './pages/admin/AdminProducts'
+import AdminOrders from './pages/admin/AdminOrders'
 import AdminSubmissions from './pages/admin/AdminSubmissions'
 import AdminUsers from './pages/admin/AdminUsers'
 
@@ -91,7 +91,7 @@ export default function App() {
           <Route path="/admin" element={<AdminRoute><AdminLayout /></AdminRoute>}>
             <Route index element={<AdminDashboard />} />
             <Route path="photos" element={<AdminPhotos />} />
-            <Route path="products" element={<AdminProducts />} />
+            <Route path="orders" element={<AdminOrders />} />
             <Route path="sessions" element={<AdminSessions />} />
             <Route path="submissions" element={<AdminSubmissions />} />
             <Route path="users" element={<AdminUsers />} />

@@ -12,7 +12,7 @@ export default function AdminLayout() {
   const menuItems = [
     { name: 'Overview',      path: '/admin',              icon: LayoutDashboard },
     { name: 'Media',         path: '/admin/photos',       icon: Camera },
-    { name: 'Store',         path: '/admin/products',     icon: ShoppingBag },
+    { name: 'Orders',        path: '/admin/orders',       icon: ShoppingBag },
     { name: 'Bookings',      path: '/admin/sessions',     icon: Calendar },
     { name: 'Applications',  path: '/admin/submissions',  icon: Send },
     { name: 'Users',         path: '/admin/users',        icon: Users },

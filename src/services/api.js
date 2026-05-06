@@ -51,6 +51,8 @@ export const productsAPI = {
 export const ordersAPI = {
   checkout: (data) => api.post('/orders/checkout', data),
   list: () => api.get('/orders/'),
+  listAll: () => api.get('/orders/all'),
+  updateStatus: (id, status) => api.put(`/orders/${id}`, null, { params: { status } }),
 }
 
 export const sessionsAPI = {
