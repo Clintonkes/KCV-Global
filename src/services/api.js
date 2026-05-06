@@ -30,7 +30,9 @@ api.interceptors.response.use(
 
 export const authAPI = {
   register: (data) => api.post('/auth/register', data),
-  login: (data) => api.post('/auth/login', data),
+  login: (data) => api.post('/auth/login', data, {
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+  }),
   me: () => api.get('/auth/me'),
 }
 
@@ -69,6 +71,7 @@ export const submissionsAPI = {
 export const adminAPI = {
   stats: () => api.get('/admin/stats'),
   users: () => api.get('/admin/users'),
+  updateUser: (id, data) => api.put(`/admin/users/${id}`, data),
 }
 
 export default api
