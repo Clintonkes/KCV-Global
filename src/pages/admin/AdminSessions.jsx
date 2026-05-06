@@ -34,8 +34,7 @@ export default function AdminSessions() {
     }
   }
 
-    }
-  }
+
 
   const paginatedSessions = sessions.slice(
     (currentPage - 1) * itemsPerPage,

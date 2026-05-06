@@ -40,8 +40,7 @@ export default function AdminUsers() {
     u.email?.toLowerCase().includes(searchTerm.toLowerCase())
   )
 
-    }
-  }
+
 
   const paginatedUsers = filteredUsers.slice(
     (currentPage - 1) * itemsPerPage,

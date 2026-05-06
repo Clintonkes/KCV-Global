@@ -34,8 +34,7 @@ export default function AdminSubmissions() {
     }
   }
 
-    }
-  }
+
 
   const paginatedSubmissions = submissions.slice(
     (currentPage - 1) * itemsPerPage,
