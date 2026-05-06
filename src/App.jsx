@@ -51,11 +51,14 @@ function SiteLayout({ children }) {
       <Navbar />
       <main className="pt-24">{children}</main>
       <Footer />
-      <Toaster position="bottom-right" toastOptions={{
+      <Toaster position="top-center" containerStyle={{ top: 80 }} toastOptions={{
         style: {
           background: '#1A1D21',
           color: '#F3E5D8',
-          border: '1px solid rgba(255,255,255,0.05)'
+          border: '1px solid rgba(255,255,255,0.08)',
+          fontFamily: 'Inter, sans-serif',
+          fontSize: '14px',
+          zIndex: 9999,
         }
       }} />
     </>

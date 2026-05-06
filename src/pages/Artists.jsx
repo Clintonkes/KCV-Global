@@ -9,7 +9,7 @@ export default function Artists() {
   const [artists, setArtists] = useState([])
   const [loading, setLoading] = useState(true)
   const [showApply, setShowApply] = useState(false)
-  const [applyForm, setApplyForm] = useState({ category: 'Photography', bio: '' })
+  const [applyForm, setApplyForm] = useState({ category: 'Photography', bio: '', name: '', email: '' })
 
   useEffect(() => {
     // In a real app, this would fetch approved artists. 
@@ -98,6 +98,28 @@ export default function Artists() {
               <p className="text-platinum/40 text-sm font-sans mb-8">Tell us about your work and why you want to join KCV.</p>
               
               <form onSubmit={handleApply} className="space-y-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-platinum/40 text-[10px] uppercase tracking-widest mb-2 font-sans font-bold">Your Name</label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="Jane Doe"
+                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-platinum focus:outline-none focus:border-champagne/40 text-sm"
+                      onChange={(e) => setApplyForm({...applyForm, name: e.target.value})}
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-platinum/40 text-[10px] uppercase tracking-widest mb-2 font-sans font-bold">Email Address</label>
+                    <input
+                      type="email"
+                      required
+                      placeholder="jane@example.com"
+                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-platinum focus:outline-none focus:border-champagne/40 text-sm"
+                      onChange={(e) => setApplyForm({...applyForm, email: e.target.value})}
+                    />
+                  </div>
+                </div>
                 <div>
                   <label className="block text-platinum/40 text-[10px] uppercase tracking-widest mb-2 font-sans font-bold">Primary Discipline</label>
                   <select 

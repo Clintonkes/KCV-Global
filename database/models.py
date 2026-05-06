@@ -72,7 +72,9 @@ class Session(Base):
 class Submission(Base):
     __tablename__ = "submissions"
     id = Column(Integer, primary_key=True, index=True)
-    artist_id = Column(Integer, ForeignKey("users.id"))
+    artist_id = Column(Integer, ForeignKey("users.id"), nullable=True)
+    name = Column(String, nullable=True)
+    email = Column(String, nullable=True)
     category = Column(String)
     bio = Column(Text)
     status = Column(String, default="pending") # pending, approved, rejected

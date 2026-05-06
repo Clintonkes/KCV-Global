@@ -23,7 +23,7 @@ export default function Shop() {
 
   useEffect(() => {
     productsAPI.list()
-      .then(setProducts)
+      .then(data => setProducts(Array.isArray(data) ? data : []))
       .catch(err => {
         toast.error("Failed to load products")
         console.error(err)

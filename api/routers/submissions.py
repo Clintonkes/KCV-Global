@@ -3,14 +3,16 @@ from sqlalchemy.orm import Session
 from typing import List
 from database.session import get_db
 from database import models, schemas
-from .auth import get_current_user
+from .auth import get_current_user, get_current_user_optional
 
 router = APIRouter()
 
 @router.post("/", response_model=schemas.Submission)
-def submit_work(submission_data: schemas.SubmissionCreate, db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
+def submit_work(submission_data: schemas.SubmissionCreate, db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user_optional)):
     new_submission = models.Submission(
-        artist_id=current_user.id,
+        artist_id=current_user.id if current_user else None,
+        name=submission_data.name if not current_user else current_user.username,
+        email=submission_data.email if not current_user else current_user.email,
         category=submission_data.category,
         bio=submission_data.bio,
         status="pending"

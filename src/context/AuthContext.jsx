@@ -20,7 +20,10 @@ export function AuthProvider({ children }) {
   }, [])
 
   const login = async (email, password) => {
-    const { access_token } = await authAPI.login({ username: email, password })
+    const formData = new URLSearchParams()
+    formData.append('username', email)
+    formData.append('password', password)
+    const { access_token } = await authAPI.login(formData)
     localStorage.setItem('kcv_token', access_token)
     const userData = await authAPI.me()
     setUser(userData)

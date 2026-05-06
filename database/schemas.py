@@ -105,18 +105,20 @@ class Session(SessionBase):
 class SubmissionBase(BaseModel):
     category: str
     bio: str
+    name: Optional[str] = None
+    email: Optional[EmailStr] = None
 
 class SubmissionCreate(SubmissionBase):
     pass
 
 class Submission(SubmissionBase):
     id: int
-    artist_id: int
+    artist_id: Optional[int] = None
     status: str
     created_at: datetime
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 # Admin Stats
 class DashboardStats(BaseModel):

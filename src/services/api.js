@@ -33,7 +33,7 @@ api.interceptors.response.use(
 
 export const authAPI = {
   register: (data) => api.post('/auth/register', data),
-  login: (data) => api.post('/auth/login', data),
+  login: (data) => api.post('/auth/login', data, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }),
   me: () => api.get('/auth/me'),
 }
 
@@ -64,7 +64,7 @@ export const sessionsAPI = {
 }
 
 export const submissionsAPI = {
-  submit: (data) => api.post('/submissions', data),
+  submit: (data) => api.post('/submissions/', data),
   list: () => api.get('/submissions'),
   review: (id, status) => api.put(`/submissions/${id}`, null, { params: { status } }),
 }

@@ -6,7 +6,7 @@ export default function Home() {
   return (
     <div className="bg-slate-deep text-platinum min-h-screen">
       {/* Hero Section */}
-      <section className="relative h-screen flex items-center px-10 pt-32 lg:pt-0">
+      <section className="relative min-h-screen flex items-center px-10 pt-32 pb-20 lg:pt-0">
         <div className="max-w-4xl z-10">
           <motion.span 
             initial={{ opacity: 0, x: -20 }}
