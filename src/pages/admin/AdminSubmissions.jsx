@@ -6,6 +6,8 @@ import toast from 'react-hot-toast'
 export default function AdminSubmissions() {
   const [submissions, setSubmissions] = useState([])
   const [loading, setLoading] = useState(true)
+  const [currentPage, setCurrentPage] = useState(1)
+  const itemsPerPage = 5
 
   useEffect(() => { fetchSubmissions() }, [])
 
@@ -32,6 +34,15 @@ export default function AdminSubmissions() {
     }
   }
 
+    }
+  }
+
+  const paginatedSubmissions = submissions.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  )
+  const totalPages = Math.ceil(submissions.length / itemsPerPage)
+
   return (
     <div>
       <div className="mb-8">
@@ -49,8 +60,9 @@ export default function AdminSubmissions() {
           <p className="text-platinum/30 font-serif text-xl italic">No applications at this time.</p>
         </div>
       ) : (
-        <div className="space-y-4">
-          {submissions.map((sub) => (
+        <div className="space-y-6">
+          <div className="space-y-4">
+            {paginatedSubmissions.map((sub) => (
             <div key={sub.id} className="bg-slate-card border border-white/5 p-5 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:border-white/10 transition-all">
               <div className="flex items-start gap-4">
                 <div className="w-11 h-11 rounded-2xl bg-champagne/10 flex items-center justify-center text-champagne flex-shrink-0">
@@ -90,9 +102,36 @@ export default function AdminSubmissions() {
                 </div>
               )}
             </div>
+            </div>
           ))}
         </div>
-      )}
+
+        {/* Pagination Controls */}
+        {submissions.length > itemsPerPage && (
+          <div className="px-8 py-4 bg-slate-card/50 border border-white/5 rounded-2xl flex items-center justify-between mt-6">
+            <p className="text-platinum/40 text-[10px] uppercase tracking-widest font-bold">
+              Showing {(currentPage - 1) * itemsPerPage + 1} to {Math.min(currentPage * itemsPerPage, submissions.length)} of {submissions.length}
+            </p>
+            <div className="flex gap-2">
+              <button 
+                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                disabled={currentPage === 1}
+                className="px-4 py-2 rounded-lg bg-white/5 text-platinum/60 text-xs font-bold hover:bg-white/10 disabled:opacity-30 transition-all"
+              >
+                Prev
+              </button>
+              <button 
+                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                disabled={currentPage === totalPages}
+                className="px-4 py-2 rounded-lg bg-white/5 text-platinum/60 text-xs font-bold hover:bg-white/10 disabled:opacity-30 transition-all"
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+    )}
     </div>
   )
 }

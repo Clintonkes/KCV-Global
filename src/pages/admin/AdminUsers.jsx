@@ -6,6 +6,8 @@ import toast from 'react-hot-toast'
 export default function AdminUsers() {
   const [users, setUsers] = useState([])
   const [loading, setLoading] = useState(true)
+  const [currentPage, setCurrentPage] = useState(1)
+  const itemsPerPage = 5
   const [searchTerm, setSearchTerm] = useState('')
 
   useEffect(() => { fetchUsers() }, [])
@@ -38,6 +40,15 @@ export default function AdminUsers() {
     u.email?.toLowerCase().includes(searchTerm.toLowerCase())
   )
 
+    }
+  }
+
+  const paginatedUsers = filteredUsers.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  )
+  const totalPages = Math.ceil(filteredUsers.length / itemsPerPage)
+
   return (
     <div>
       <div className="mb-8 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
@@ -65,8 +76,9 @@ export default function AdminUsers() {
           <p className="text-platinum/30 font-serif text-xl italic">No users found.</p>
         </div>
       ) : (
-        <div className="space-y-3">
-          {filteredUsers.map((u) => (
+        <div className="space-y-4">
+          <div className="space-y-3">
+            {paginatedUsers.map((u) => (
             <div key={u.id} className="bg-slate-card border border-white/5 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:border-white/10 transition-all">
               <div className="flex items-center gap-4">
                 <div className="w-10 h-10 rounded-full bg-champagne/10 flex items-center justify-center text-champagne flex-shrink-0">
@@ -96,9 +108,36 @@ export default function AdminUsers() {
                 </select>
               </div>
             </div>
+            </div>
           ))}
         </div>
-      )}
+
+        {/* Pagination Controls */}
+        {filteredUsers.length > itemsPerPage && (
+          <div className="px-8 py-4 bg-slate-card/50 border border-white/5 rounded-2xl flex items-center justify-between mt-6">
+            <p className="text-platinum/40 text-[10px] uppercase tracking-widest font-bold">
+              Showing {(currentPage - 1) * itemsPerPage + 1} to {Math.min(currentPage * itemsPerPage, filteredUsers.length)} of {filteredUsers.length}
+            </p>
+            <div className="flex gap-2">
+              <button 
+                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                disabled={currentPage === 1}
+                className="px-4 py-2 rounded-lg bg-white/5 text-platinum/60 text-xs font-bold hover:bg-white/10 disabled:opacity-30 transition-all"
+              >
+                Prev
+              </button>
+              <button 
+                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                disabled={currentPage === totalPages}
+                className="px-4 py-2 rounded-lg bg-white/5 text-platinum/60 text-xs font-bold hover:bg-white/10 disabled:opacity-30 transition-all"
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+    )}
     </div>
   )
 }

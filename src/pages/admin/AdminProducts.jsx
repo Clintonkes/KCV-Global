@@ -11,6 +11,8 @@ export default function AdminProducts() {
   const [uploading, setUploading] = useState(false)
   const [formData, setFormData] = useState({ name: '', description: '', price: '', stock: '', category: 'Prints' })
   const [file, setFile] = useState(null)
+  const [currentPage, setCurrentPage] = useState(1)
+  const itemsPerPage = 5
 
   useEffect(() => {
     fetchProducts()
@@ -66,6 +68,12 @@ export default function AdminProducts() {
     setShowModal(true)
   }
 
+  const paginatedProducts = products.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  )
+  const totalPages = Math.ceil(products.length / itemsPerPage)
+
   return (
     <div>
       <div className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
@@ -82,41 +90,68 @@ export default function AdminProducts() {
       </div>
 
       <div className="bg-slate-card border border-white/5 rounded-3xl overflow-hidden">
-        <table className="w-full text-left font-sans">
-          <thead>
-            <tr className="bg-white/5 text-[10px] uppercase tracking-[0.2em] text-platinum/40">
-              <th className="px-8 py-5 font-bold">Product</th>
-              <th className="px-8 py-5 font-bold">Price</th>
-              <th className="px-8 py-5 font-bold">Stock</th>
-              <th className="px-8 py-5 font-bold text-right">Actions</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-white/5">
-            {products.map((product) => (
-              <tr key={product.id} className="hover:bg-white/[0.02] transition-colors group">
-                <td className="px-8 py-6">
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-xl bg-slate-deep overflow-hidden border border-white/10">
-                       <img src={product.image_url} alt="" className="w-full h-full object-cover" />
-                    </div>
-                    <div>
-                      <p className="text-platinum font-bold text-sm">{product.name}</p>
-                      <p className="text-platinum/40 text-xs mt-0.5">{product.category}</p>
-                    </div>
-                  </div>
-                </td>
-                <td className="px-8 py-6 text-champagne font-bold">${product.price.toFixed(2)}</td>
-                <td className="px-8 py-6 text-platinum/60 text-sm">{product.stock} Units</td>
-                <td className="px-8 py-6 text-right">
-                  <div className="flex items-center justify-end gap-3">
-                    <button onClick={() => openEdit(product)} className="p-2 text-platinum/20 hover:text-champagne transition-colors"><Edit3 size={16} /></button>
-                    <button onClick={() => handleDelete(product.id)} className="p-2 text-platinum/20 hover:text-red-400 transition-colors"><Trash2 size={16} /></button>
-                  </div>
-                </td>
+        <div className="overflow-x-auto">
+          <table className="w-full text-left font-sans min-w-[600px]">
+            <thead>
+              <tr className="bg-white/5 text-[10px] uppercase tracking-[0.2em] text-platinum/40">
+                <th className="px-8 py-5 font-bold">Product</th>
+                <th className="px-8 py-5 font-bold">Price</th>
+                <th className="px-8 py-5 font-bold">Stock</th>
+                <th className="px-8 py-5 font-bold text-right">Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="divide-y divide-white/5">
+              {paginatedProducts.map((product) => (
+                <tr key={product.id} className="hover:bg-white/[0.02] transition-colors group">
+                  <td className="px-8 py-6">
+                    <div className="flex items-center gap-4">
+                      <div className="w-12 h-12 rounded-xl bg-slate-deep overflow-hidden border border-white/10">
+                         <img src={product.image_url} alt="" className="w-full h-full object-cover" />
+                      </div>
+                      <div>
+                        <p className="text-platinum font-bold text-sm">{product.name}</p>
+                        <p className="text-platinum/40 text-xs mt-0.5">{product.category}</p>
+                      </div>
+                    </div>
+                  </td>
+                  <td className="px-8 py-6 text-champagne font-bold">${product.price.toFixed(2)}</td>
+                  <td className="px-8 py-6 text-platinum/60 text-sm">{product.stock} Units</td>
+                  <td className="px-8 py-6 text-right">
+                    <div className="flex items-center justify-end gap-3">
+                      <button onClick={() => openEdit(product)} className="p-2 text-platinum/20 hover:text-champagne transition-colors"><Edit3 size={16} /></button>
+                      <button onClick={() => handleDelete(product.id)} className="p-2 text-platinum/20 hover:text-red-400 transition-colors"><Trash2 size={16} /></button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Pagination Controls */}
+        {products.length > itemsPerPage && (
+          <div className="px-8 py-4 bg-white/5 border-t border-white/5 flex items-center justify-between">
+            <p className="text-platinum/40 text-[10px] uppercase tracking-widest font-bold">
+              Showing {(currentPage - 1) * itemsPerPage + 1} to {Math.min(currentPage * itemsPerPage, products.length)} of {products.length}
+            </p>
+            <div className="flex gap-2">
+              <button 
+                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                disabled={currentPage === 1}
+                className="px-4 py-2 rounded-lg bg-white/5 text-platinum/60 text-xs font-bold hover:bg-white/10 disabled:opacity-30 transition-all"
+              >
+                Prev
+              </button>
+              <button 
+                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                disabled={currentPage === totalPages}
+                className="px-4 py-2 rounded-lg bg-white/5 text-platinum/60 text-xs font-bold hover:bg-white/10 disabled:opacity-30 transition-all"
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        )}
         {!loading && products.length === 0 && (
           <div className="p-20 text-center">
              <ShoppingBag size={40} className="mx-auto text-platinum/10 mb-4" />

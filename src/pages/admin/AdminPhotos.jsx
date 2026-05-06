@@ -11,6 +11,8 @@ export default function AdminPhotos() {
   const [uploading, setUploading] = useState(false)
   const [formData, setFormData] = useState({ title: '', description: '', category: 'Portrait', price: '' })
   const [file, setFile] = useState(null)
+  const [currentPage, setCurrentPage] = useState(1)
+  const itemsPerPage = 5
 
   useEffect(() => { fetchPhotos() }, [])
 
@@ -61,6 +63,12 @@ export default function AdminPhotos() {
     }
   }
 
+  const paginatedPhotos = photos.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  )
+  const totalPages = Math.ceil(photos.length / itemsPerPage)
+
   const getFullUrl = (url) => {
     if (!url) return ''
     if (url.startsWith('http')) return url
@@ -93,9 +101,10 @@ export default function AdminPhotos() {
           <p className="text-platinum/30 font-serif text-xl italic">No photos uploaded yet.</p>
         </div>
       ) : (
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          <AnimatePresence>
-            {photos.map((photo) => (
+        <div className="space-y-8">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            <AnimatePresence>
+              {paginatedPhotos.map((photo) => (
               <motion.div
                 key={photo.id} layout
                 initial={{ opacity: 0, scale: 0.9 }}
@@ -117,7 +126,33 @@ export default function AdminPhotos() {
                 </div>
               </motion.div>
             ))}
-          </AnimatePresence>
+            </AnimatePresence>
+          </div>
+
+          {/* Pagination Controls */}
+          {photos.length > itemsPerPage && (
+            <div className="px-8 py-4 bg-slate-card/50 border border-white/5 rounded-2xl flex items-center justify-between">
+              <p className="text-platinum/40 text-[10px] uppercase tracking-widest font-bold">
+                Showing {(currentPage - 1) * itemsPerPage + 1} to {Math.min(currentPage * itemsPerPage, photos.length)} of {photos.length}
+              </p>
+              <div className="flex gap-2">
+                <button 
+                  onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                  disabled={currentPage === 1}
+                  className="px-4 py-2 rounded-lg bg-white/5 text-platinum/60 text-xs font-bold hover:bg-white/10 disabled:opacity-30 transition-all"
+                >
+                  Prev
+                </button>
+                <button 
+                  onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                  disabled={currentPage === totalPages}
+                  className="px-4 py-2 rounded-lg bg-white/5 text-platinum/60 text-xs font-bold hover:bg-white/10 disabled:opacity-30 transition-all"
+                >
+                  Next
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       )}
 

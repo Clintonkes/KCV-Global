@@ -38,15 +38,15 @@ export const authAPI = {
 
 export const photosAPI = {
   list: (params) => api.get('/photos/', { params }),
-  create: (data) => api.post('/photos/', data, { headers: { 'Content-Type': 'multipart/form-data' } }),
+  create: (data) => api.post('/photos/', data),
   delete: (id) => api.delete(`/photos/${id}`),
 }
 
 export const productsAPI = {
   list: (params) => api.get('/products/', { params }),
   get: (id) => api.get(`/products/${id}`),
-  create: (data) => api.post('/products/', data, { headers: { 'Content-Type': 'multipart/form-data' } }),
-  update: (id, data) => api.put(`/products/${id}`, data, { headers: { 'Content-Type': 'multipart/form-data' } }),
+  create: (data) => api.post('/products/', data),
+  update: (id, data) => api.put(`/products/${id}`, data),
   delete: (id) => api.delete(`/products/${id}`),
 }
 
