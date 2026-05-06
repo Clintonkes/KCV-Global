@@ -50,9 +50,7 @@ export default function AdminLayout() {
       </nav>
 
       <div className="space-y-2 mt-6 pt-6 border-t border-white/5">
-        <Link to="/" className="flex items-center gap-3 text-platinum/30 hover:text-champagne transition-colors text-sm px-4 py-2 rounded-xl hover:bg-white/5">
-          <Home size={18} /> Back to Site
-        </Link>
+
         <button
           onClick={logout}
           className="w-full flex items-center gap-3 text-red-400/60 hover:text-red-400 transition-colors text-sm px-4 py-2 rounded-xl hover:bg-red-500/5"
@@ -106,9 +104,7 @@ export default function AdminLayout() {
             <Menu size={22} />
           </button>
           <span className="font-serif text-xl text-champagne">KCV Admin</span>
-          <Link to="/" className="p-2 text-platinum/40 hover:text-champagne transition-colors">
-            <Home size={20} />
-          </Link>
+
         </div>
 
         {/* Page Content */}

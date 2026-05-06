@@ -44,6 +44,7 @@ export default function AdminPhotos() {
       toast.success('Photo uploaded!')
       setShowUpload(false)
       setFile(null)
+      setFormData({ title: '', description: '', category: 'Portrait', price: '' })
       fetchPhotos()
     } catch {
       toast.error('Error uploading photo.')
@@ -184,19 +185,40 @@ export default function AdminPhotos() {
 
               <div>
                 <label className="block text-platinum/40 text-[10px] uppercase tracking-widest mb-2 font-sans font-bold">Title</label>
-                <input type="text" required className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-platinum focus:outline-none focus:border-champagne/40 text-sm" onChange={(e) => setFormData({...formData, title: e.target.value})} />
+                <input type="text" required value={formData.title} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-platinum focus:outline-none focus:border-champagne/40 text-sm" onChange={(e) => setFormData({...formData, title: e.target.value})} />
+              </div>
+
+              <div>
+                <label className="block text-platinum/40 text-[10px] uppercase tracking-widest mb-2 font-sans font-bold">Description</label>
+                <textarea 
+                  required 
+                  rows="3"
+                  value={formData.description}
+                  className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-platinum focus:outline-none focus:border-champagne/40 text-sm resize-none" 
+                  onChange={(e) => setFormData({...formData, description: e.target.value})}
+                />
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-platinum/40 text-[10px] uppercase tracking-widest mb-2 font-sans font-bold">Category</label>
-                  <select className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-platinum focus:outline-none focus:border-champagne/40 text-sm appearance-none" onChange={(e) => setFormData({...formData, category: e.target.value})}>
+                  <select 
+                    value={formData.category}
+                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-platinum focus:outline-none focus:border-champagne/40 text-sm appearance-none" 
+                    onChange={(e) => setFormData({...formData, category: e.target.value})}
+                  >
                     <option>Portrait</option><option>Landscape</option><option>Editorial</option><option>Fine Art</option>
                   </select>
                 </div>
                 <div>
                   <label className="block text-platinum/40 text-[10px] uppercase tracking-widest mb-2 font-sans font-bold">Price ($)</label>
-                  <input type="number" step="0.01" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-platinum focus:outline-none focus:border-champagne/40 text-sm" onChange={(e) => setFormData({...formData, price: e.target.value})} />
+                  <input 
+                    type="number" 
+                    step="0.01" 
+                    value={formData.price}
+                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-platinum focus:outline-none focus:border-champagne/40 text-sm" 
+                    onChange={(e) => setFormData({...formData, price: e.target.value})} 
+                  />
                 </div>
               </div>
 
