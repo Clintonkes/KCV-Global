@@ -14,3 +14,4 @@ pillow
 pytest
 httpx
 email-validator
+resend

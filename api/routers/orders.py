@@ -4,6 +4,7 @@ from typing import List
 from database.session import get_db
 from database import models, schemas
 from .auth import get_current_user, get_current_user_optional
+from utils import email
 import stripe
 import os
 
@@ -34,6 +35,12 @@ def checkout(order_data: schemas.OrderCreate, db: Session = Depends(get_db), cur
         db.commit()
         db.refresh(new_order)
         
+        email.send_checkout_received_email(
+            to_email=new_order.email,
+            order_id=new_order.id,
+            total_amount=new_order.total_amount
+        )
+        
         return {
             "status": "pending",
             "order_id": new_order.id,
@@ -55,4 +62,25 @@ def get_order(order_id: int, db: Session = Depends(get_db), current_user: models
         raise HTTPException(status_code=404, detail="Order not found")
     if order.user_id != current_user.id and current_user.role != "admin":
         raise HTTPException(status_code=403, detail="Not authorized")
+    return order
+
+@router.put("/{order_id}", response_model=schemas.Order)
+def update_order_status(order_id: int, status: str, db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Not authorized")
+    
+    order = db.query(models.Order).filter(models.Order.id == order_id).first()
+    if not order:
+        raise HTTPException(status_code=404, detail="Order not found")
+    
+    order.status = status
+    db.commit()
+    db.refresh(order)
+    
+    email.send_order_status_email(
+        to_email=order.email,
+        order_id=order.id,
+        status=status
+    )
+    
     return order

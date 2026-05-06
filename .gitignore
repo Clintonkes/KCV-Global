@@ -44,3 +44,6 @@ uploads/
 Thumbs.db
 
 migrate.py
+*Zone.Identifier
+
+proton-recovery-phrase.pdf

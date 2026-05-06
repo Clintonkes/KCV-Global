@@ -4,6 +4,7 @@ from typing import List, Optional
 from database.session import get_db
 from database import models, schemas
 from .auth import get_current_user, get_current_user_optional
+from utils import email
 
 router = APIRouter()
 
@@ -29,6 +30,15 @@ def book_session(session_data: schemas.SessionCreate, db: Session = Depends(get_
     db.add(new_session)
     db.commit()
     db.refresh(new_session)
+    
+    email.send_booking_received_email(
+        to_email=new_session.email,
+        guest_name=new_session.guest_name,
+        date=new_session.date,
+        time_slot=new_session.time_slot,
+        type=new_session.type
+    )
+    
     return new_session
 
 @router.get("/my", response_model=List[schemas.Session])
@@ -47,6 +57,16 @@ def update_session_status(session_id: int, status: str, db: Session = Depends(ge
     session.status = status
     db.commit()
     db.refresh(session)
+    
+    if status.lower() == "confirmed":
+        email.send_booking_accepted_email(
+            to_email=session.email,
+            guest_name=session.guest_name,
+            date=session.date,
+            time_slot=session.time_slot,
+            type=session.type
+        )
+        
     return session
 
 @router.delete("/{session_id}")

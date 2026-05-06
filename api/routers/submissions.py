@@ -4,6 +4,7 @@ from typing import List
 from database.session import get_db
 from database import models, schemas
 from .auth import get_current_user, get_current_user_optional
+from utils import email
 
 router = APIRouter()
 
@@ -49,6 +50,11 @@ def review_submission(submission_id: int, status: str, db: Session = Depends(get
         if artist:
             artist.role = "artist"
             artist.is_creator = True
+            
+        email.send_application_accepted_email(
+            to_email=submission.email,
+            name=submission.name
+        )
     
     db.commit()
     db.refresh(submission)
