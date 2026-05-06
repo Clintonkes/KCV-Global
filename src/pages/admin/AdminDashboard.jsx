@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { adminAPI } from '../../services/api'
 import { Users, ShoppingBag, Calendar, Camera, Send, TrendingUp, DollarSign } from 'lucide-react'
+import toast from 'react-hot-toast'
 
 export default function AdminDashboard() {
   const [stats, setStats] = useState(null)
@@ -9,7 +10,11 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     adminAPI.stats()
-      .then(setStats)
+      .then(data => setStats(data || {}))
+      .catch(() => {
+        toast.error('Failed to load dashboard stats')
+        setStats({})
+      })
       .finally(() => setLoading(false))
   }, [])
 

@@ -1,21 +1,22 @@
 import { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
 import { sessionsAPI } from '../../services/api'
-import { Calendar, Clock, User, CheckCircle, XCircle, Trash2, Loader2 } from 'lucide-react'
+import { Calendar, User, CheckCircle, XCircle, Mail } from 'lucide-react'
+import toast from 'react-hot-toast'
 
 export default function AdminSessions() {
   const [sessions, setSessions] = useState([])
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    fetchSessions()
-  }, [])
+  useEffect(() => { fetchSessions() }, [])
 
   const fetchSessions = async () => {
     setLoading(true)
     try {
       const data = await sessionsAPI.getSlots()
-      setSessions(data)
+      setSessions(Array.isArray(data) ? data : [])
+    } catch {
+      toast.error('Failed to load sessions')
+      setSessions([])
     } finally {
       setLoading(false)
     }
@@ -24,14 +25,15 @@ export default function AdminSessions() {
   const handleUpdateStatus = async (id, status) => {
     try {
       await sessionsAPI.updateStatus(id, status)
+      toast.success(`Session ${status}`)
       fetchSessions()
-    } catch (err) {
-      alert('Error updating session status.')
+    } catch {
+      toast.error('Error updating session status.')
     }
   }
 
   const statusStyles = {
-    pending: 'bg-champagne/10 text-champagne border-champagne/20',
+    pending:   'bg-champagne/10 text-champagne border-champagne/20',
     confirmed: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
     completed: 'bg-platinum/10 text-platinum border-platinum/20',
     cancelled: 'bg-red-500/10 text-red-400 border-red-500/20',
@@ -39,81 +41,60 @@ export default function AdminSessions() {
 
   return (
     <div>
-      <div className="mb-12">
-        <h1 className="text-4xl font-serif text-champagne mb-2">Booking Manager</h1>
-        <p className="text-platinum/40 text-sm font-sans tracking-wide">Track and confirm creative sessions and consulting calls.</p>
+      <div className="mb-8">
+        <h1 className="text-3xl md:text-4xl font-serif text-champagne mb-1">Booking Manager</h1>
+        <p className="text-platinum/40 text-sm font-sans">Track and confirm creative sessions and consulting calls.</p>
       </div>
 
-      <div className="bg-slate-card border border-white/5 rounded-3xl overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full text-left font-sans min-w-[800px]">
-            <thead>
-              <tr className="bg-white/5 text-[10px] uppercase tracking-[0.2em] text-platinum/40">
-                <th className="px-8 py-5 font-bold">Client & Session</th>
-                <th className="px-8 py-5 font-bold">Date & Time</th>
-                <th className="px-8 py-5 font-bold">Status</th>
-                <th className="px-8 py-5 font-bold text-right">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-white/5">
-              {sessions.map((session) => (
-                <tr key={session.id} className="hover:bg-white/[0.02] transition-colors">
-                  <td className="px-8 py-6">
-                    <div className="flex items-start gap-4">
-                      <div className="w-10 h-10 rounded-full bg-champagne/10 flex items-center justify-center text-champagne">
-                        <User size={18} />
-                      </div>
-                      <div>
-                        <p className="text-platinum font-bold text-sm">Client ID: {session.client_id}</p>
-                        <p className="text-platinum/40 text-xs mt-0.5">{session.type} Session</p>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-8 py-6">
-                    <div className="flex items-center gap-2 text-platinum font-medium text-sm">
-                       <Calendar size={14} className="text-champagne" />
-                       {session.date}
-                    </div>
-                    <div className="flex items-center gap-2 text-platinum/40 text-xs mt-1">
-                       <Clock size={14} />
-                       {session.time_slot}
-                    </div>
-                  </td>
-                  <td className="px-8 py-6">
-                    <span className={`text-[10px] uppercase tracking-widest px-3 py-1 rounded-full border ${statusStyles[session.status]}`}>
+      {loading ? (
+        <div className="space-y-3">
+          {[1,2,3].map(i => <div key={i} className="h-28 bg-slate-card rounded-2xl animate-pulse" />)}
+        </div>
+      ) : sessions.length === 0 ? (
+        <div className="text-center py-20 border border-white/5 border-dashed rounded-3xl">
+          <Calendar size={48} className="mx-auto text-platinum/10 mb-4" />
+          <p className="text-platinum/30 font-serif text-xl italic">No sessions found.</p>
+        </div>
+      ) : (
+        <div className="space-y-3">
+          {sessions.map((session) => (
+            <div key={session.id} className="bg-slate-card border border-white/5 rounded-2xl p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:border-white/10 transition-all">
+              <div className="flex items-start gap-4">
+                <div className="w-10 h-10 rounded-full bg-champagne/10 flex items-center justify-center text-champagne flex-shrink-0">
+                  <User size={18} />
+                </div>
+                <div className="min-w-0">
+                  <div className="flex flex-wrap items-center gap-2 mb-1">
+                    <p className="text-platinum font-bold text-sm">
+                      {session.guest_name || `Client #${session.client_id}`}
+                    </p>
+                    <span className={`text-[9px] uppercase tracking-widest px-2 py-0.5 rounded-full border ${statusStyles[session.status] || 'bg-white/5 text-platinum/40 border-white/5'}`}>
                       {session.status}
                     </span>
-                  </td>
-                  <td className="px-8 py-6 text-right">
-                    <div className="flex items-center justify-end gap-3">
-                      {session.status === 'pending' && (
-                        <button 
-                          onClick={() => handleUpdateStatus(session.id, 'confirmed')}
-                          className="p-2 text-platinum/20 hover:text-emerald-400 transition-colors"
-                        >
-                          <CheckCircle size={18} />
-                        </button>
-                      )}
-                      <button 
-                        onClick={() => handleUpdateStatus(session.id, 'cancelled')}
-                        className="p-2 text-platinum/20 hover:text-red-400 transition-colors"
-                      >
-                        <XCircle size={18} />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          {!loading && sessions.length === 0 && (
-            <div className="p-20 text-center">
-               <Calendar size={40} className="mx-auto text-platinum/10 mb-4" />
-               <p className="text-platinum/30 font-serif text-lg italic">No sessions found in the ledger.</p>
+                  </div>
+                  {session.email && (
+                    <p className="text-platinum/40 text-xs flex items-center gap-1 mb-1">
+                      <Mail size={10} /> {session.email}
+                    </p>
+                  )}
+                  <p className="text-platinum/40 text-xs font-sans">{session.type} · {session.date} at {session.time_slot}</p>
+                  {session.notes && <p className="text-platinum/30 text-xs italic mt-1 truncate max-w-xs">{session.notes}</p>}
+                </div>
+              </div>
+              <div className="flex items-center gap-2 self-end sm:self-auto">
+                {session.status === 'pending' && (
+                  <button onClick={() => handleUpdateStatus(session.id, 'confirmed')} className="flex items-center gap-1 px-3 py-2 text-xs font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-xl hover:bg-emerald-500/20 transition-all">
+                    <CheckCircle size={14} /> Confirm
+                  </button>
+                )}
+                <button onClick={() => handleUpdateStatus(session.id, 'cancelled')} className="flex items-center gap-1 px-3 py-2 text-xs font-bold bg-red-500/10 text-red-400 border border-red-500/20 rounded-xl hover:bg-red-500/20 transition-all">
+                  <XCircle size={14} /> Cancel
+                </button>
+              </div>
             </div>
-          )}
+          ))}
         </div>
-      </div>
+      )}
     </div>
   )
 }
