@@ -12,7 +12,10 @@ export function AuthProvider({ children }) {
     if (token) {
       authAPI.me()
         .then(setUser)
-        .catch(() => localStorage.removeItem('kcv_token'))
+        .catch(() => {
+          // Silently clear invalid/expired token — don't redirect guests
+          localStorage.removeItem('kcv_token')
+        })
         .finally(() => setLoading(false))
     } else {
       setLoading(false)
@@ -32,6 +35,7 @@ export function AuthProvider({ children }) {
   const logout = () => {
     localStorage.removeItem('kcv_token')
     setUser(null)
+    window.location.href = '/login'
   }
 
   return (

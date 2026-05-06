@@ -20,8 +20,9 @@ export default function BookSession() {
     e.preventDefault()
     try {
       await sessionsAPI.book(formData)
+      window.scrollTo({ top: 0, behavior: 'smooth' })
       setSubmitted(true)
-      toast.success('Booking request sent!')
+      toast.success('Booking request sent! We will reach out within 24 hours.')
     } catch (err) {
       toast.error('Error booking session. Please try again.')
       console.error(err)

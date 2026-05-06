@@ -22,7 +22,7 @@ export default function Gallery() {
   useEffect(() => {
     setLoading(true)
     photosAPI.list({ category: filter === 'All' ? undefined : filter })
-      .then(setPhotos)
+      .then(data => setPhotos(Array.isArray(data) ? data : []))
       .catch(err => {
         toast.error("Failed to load gallery")
         console.error(err)

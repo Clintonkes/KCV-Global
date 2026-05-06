@@ -20,6 +20,7 @@ export default function Artists() {
     e.preventDefault()
     try {
       await submissionsAPI.submit(applyForm)
+      window.scrollTo({ top: 0, behavior: 'smooth' })
       toast.success('Application submitted! We will review it shortly.')
       setShowApply(false)
     } catch (err) {

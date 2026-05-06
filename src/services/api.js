@@ -22,18 +22,15 @@ api.interceptors.response.use(
       data: error.response?.data,
       url: error.config?.url
     })
-    
-    if (error.response?.status === 401) {
-      localStorage.removeItem('kcv_token')
-      window.location.href = '/login'
-    }
+    // Note: We intentionally do NOT auto-redirect to /login on 401.
+    // Customers don't need accounts. Only admins log in at /login directly.
     return Promise.reject(error.response?.data || error)
   }
 )
 
 export const authAPI = {
   register: (data) => api.post('/auth/register', data),
-  login: (data) => api.post('/auth/login', data, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }),
+  login: (data) => api.post('/auth/login', data),
   me: () => api.get('/auth/me'),
 }
 
