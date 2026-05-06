@@ -7,7 +7,6 @@ import PageTransition from './components/layout/PageTransition'
 // Pages — Public
 import Home from './pages/Home'
 import Gallery from './pages/Gallery'
-import Shop from './pages/Shop'
 import BookSession from './pages/BookSession'
 import Artists from './pages/Artists'
 
@@ -73,7 +72,7 @@ export default function App() {
           {/* Public routes */}
           <Route path="/" element={<SiteLayout><PageTransition><Home /></PageTransition></SiteLayout>} />
           <Route path="/gallery" element={<SiteLayout><PageTransition><Gallery /></PageTransition></SiteLayout>} />
-          <Route path="/shop" element={<SiteLayout><PageTransition><Shop /></PageTransition></SiteLayout>} />
+
           <Route path="/book" element={<SiteLayout><PageTransition><BookSession /></PageTransition></SiteLayout>} />
           <Route path="/artists" element={<SiteLayout><PageTransition><Artists /></PageTransition></SiteLayout>} />
           

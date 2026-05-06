@@ -213,7 +213,11 @@ export default function AdminPhotos() {
                     className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-platinum focus:outline-none focus:border-champagne/40 text-sm appearance-none" 
                     onChange={(e) => setFormData({...formData, category: e.target.value})}
                   >
-                    <option>Portrait</option><option>Landscape</option><option>Editorial</option><option>Fine Art</option>
+                    <option>Portrait</option>
+                    <option>Landscape</option>
+                    <option>Fine Art</option>
+                    <option>Commercial</option>
+                    <option>Editorial</option>
                   </select>
                 </div>
                 <div>

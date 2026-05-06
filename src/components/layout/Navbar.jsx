@@ -11,7 +11,6 @@ export default function Navbar() {
 
   const navLinks = [
     { name: 'Gallery', path: '/gallery', icon: Camera },
-    { name: 'Shop', path: '/shop', icon: ShoppingBag },
     { name: 'Book', path: '/book', icon: Calendar },
     { name: 'Artists', path: '/artists', icon: User },
   ]
