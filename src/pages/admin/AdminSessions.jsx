@@ -103,7 +103,6 @@ export default function AdminSessions() {
                 </button>
               </div>
             </div>
-            </div>
           ))}
         </div>
 

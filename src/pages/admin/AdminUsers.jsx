@@ -107,7 +107,6 @@ export default function AdminUsers() {
                 </select>
               </div>
             </div>
-            </div>
           ))}
         </div>
 
