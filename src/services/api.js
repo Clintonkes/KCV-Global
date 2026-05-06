@@ -4,7 +4,6 @@ const BASE_URL = import.meta.env.PROD ? '/api/v1' : (import.meta.env.VITE_API_UR
 
 const api = axios.create({
   baseURL: BASE_URL,
-  headers: { 'Content-Type': 'application/json' },
   timeout: 15000,
 })
 
@@ -17,13 +16,12 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (response) => response.data,
   (error) => {
-    console.error("API Error:", {
+    console.error("API Error Details:", {
       status: error.response?.status,
       data: error.response?.data,
-      url: error.config?.url
+      url: error.config?.url,
+      headers: error.config?.headers
     })
-    // Note: We intentionally do NOT auto-redirect to /login on 401.
-    // Customers don't need accounts. Only admins log in at /login directly.
     return Promise.reject(error.response?.data || error)
   }
 )

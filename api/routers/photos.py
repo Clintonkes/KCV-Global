@@ -22,8 +22,8 @@ def list_photos(category: Optional[str] = None, db: Session = Depends(get_db)):
 @router.post("/", response_model=schemas.Photo)
 def create_photo(
     title: str = Form(...),
-    description: str = Form(...),
-    category: str = Form(...),
+    description: Optional[str] = Form(""),
+    category: Optional[str] = Form("Portrait"),
     price: Optional[float] = Form(None),
     file: UploadFile = File(...),
     db: Session = Depends(get_db),

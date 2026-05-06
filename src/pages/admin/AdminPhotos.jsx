@@ -35,10 +35,11 @@ export default function AdminPhotos() {
     setUploading(true)
     try {
       const fd = new FormData()
-      fd.append('title', formData.title)
-      fd.append('description', formData.description)
-      fd.append('category', formData.category)
-      if (formData.price) fd.append('price', formData.price)
+      Object.keys(formData).forEach(key => {
+        if (formData[key] !== '' && formData[key] !== null) {
+          fd.append(key, formData[key])
+        }
+      })
       fd.append('file', file)
       await photosAPI.create(fd)
       toast.success('Photo uploaded!')
@@ -46,8 +47,13 @@ export default function AdminPhotos() {
       setFile(null)
       setFormData({ title: '', description: '', category: 'Portrait', price: '' })
       fetchPhotos()
-    } catch {
-      toast.error('Error uploading photo.')
+    } catch (err) {
+      console.error('Upload error:', err)
+      const detail = err.detail || err.message || 'Error uploading photo.'
+      const errorMsg = Array.isArray(detail) 
+        ? detail.map(d => `${d.loc[d.loc.length-1]}: ${d.msg}`).join(', ')
+        : detail
+      toast.error(errorMsg)
     } finally {
       setUploading(false)
     }
