@@ -122,13 +122,8 @@ app.include_router(submissions.router, prefix="/api/v1/submissions", tags=["Subm
 app.include_router(admin.router, prefix="/api/v1/admin", tags=["Admin"])
 
 # Serve Static Files
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-# Check if we are in the 'api' subdirectory
-if os.path.basename(BASE_DIR) == "api":
-    ROOT_DIR = os.path.dirname(BASE_DIR)
-else:
-    ROOT_DIR = BASE_DIR
-
+from pathlib import Path
+ROOT_DIR = Path(__file__).resolve().parent.parent
 UPLOAD_DIR = os.path.join(ROOT_DIR, "uploads")
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 app.mount("/uploads", StaticFiles(directory=UPLOAD_DIR), name="uploads")

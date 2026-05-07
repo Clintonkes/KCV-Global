@@ -9,13 +9,8 @@ import os
 
 router = APIRouter()
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-# Check if we are in the 'api' subdirectory
-if os.path.basename(BASE_DIR) == "api":
-    ROOT_DIR = os.path.dirname(BASE_DIR)
-else:
-    ROOT_DIR = BASE_DIR
-
+from pathlib import Path
+ROOT_DIR = Path(__file__).resolve().parent.parent.parent
 UPLOAD_DIR = os.path.join(ROOT_DIR, "uploads/photos")
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 

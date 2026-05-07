@@ -39,6 +39,29 @@ def list_users(db: Session = Depends(get_db), current_user: models.User = Depend
         raise HTTPException(status_code=403, detail="Not authorized")
     return db.query(models.User).all()
 
+@router.get("/debug-uploads")
+def debug_uploads(current_user: models.User = Depends(get_current_user)):
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Not authorized")
+    
+    import os
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+    ROOT_DIR = os.path.dirname(BASE_DIR) if os.path.basename(BASE_DIR) == "api" else BASE_DIR
+    UPLOAD_PATH = os.path.join(ROOT_DIR, "uploads")
+    
+    files = []
+    if os.path.exists(UPLOAD_PATH):
+        for root, dirs, filenames in os.walk(UPLOAD_PATH):
+            for f in filenames:
+                files.append(os.path.join(root, f))
+    
+    return {
+        "root_dir": ROOT_DIR,
+        "upload_path": UPLOAD_PATH,
+        "exists": os.path.exists(UPLOAD_PATH),
+        "files": files
+    }
+
 @router.put("/users/{user_id}", response_model=schemas.User)
 def update_user_role(user_id: int, body: RoleUpdate, db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
     if current_user.role != "admin":
