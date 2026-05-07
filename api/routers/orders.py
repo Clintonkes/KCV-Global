@@ -16,7 +16,7 @@ def checkout(order_data: schemas.OrderCreate, db: Session = Depends(get_db), cur
     try:
         new_order = models.Order(
             user_id=current_user.id if current_user else None,
-            email=order_data.email if not current_user else current_user.email,
+            email=order_data.email or (current_user.email if current_user else None),
             total_amount=order_data.total_amount,
             items=order_data.items,
             status="pending",
